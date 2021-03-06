@@ -100,3 +100,67 @@ perfect n = n == sum [ i | i <- factors n, i < n ]
 
 perfects :: Int -> [Int]
 perfects n = [ i | i <- [1 .. n], perfect i ]
+
+fac :: Int -> Int
+fac 0 = 1
+fac n | n >= 1    = n * fac (n - 1)
+      | otherwise = 0
+
+fac_mb :: Int -> Maybe Int
+fac_mb 0 = Just 1
+fac_mb n
+  | n >= 1 = case fac_mb (n - 1) of
+    Just k  -> Just (n * k)
+    Nothing -> Nothing
+  | otherwise = Nothing
+
+fac_mb2 :: Int -> Maybe Int
+fac_mb2 0 = Just 1
+fac_mb2 n | n >= 1    = fmap (* n) (fac_mb2 (n - 1))
+          | otherwise = Nothing
+
+sumdown :: Int -> Int
+sumdown 0 = 0
+sumdown n | n > 0     = n + sumdown (n - 1)
+          | otherwise = 0
+
+and2 :: [Bool] -> Bool
+and2 []           = True
+and2 (True  : xs) = and2 xs
+and2 (False : _ ) = False
+
+concat2 :: [[a]] -> [a]
+concat2 []         = []
+concat2 (xs : xss) = xs ++ concat2 xss
+
+(!!!) :: [a] -> Int -> Maybe a
+(!!!) [] n = Nothing
+(!!!) (x : xs) n | n == 0    = Just x
+                 | otherwise = (!!!) xs (n - 1)
+
+merge :: Ord a => [a] -> [a] -> [a]
+merge [] [] = []
+merge [] ys = ys
+merge xs [] = xs
+merge (x : xs) (y : ys) | x <= y    = [x] ++ merge xs (y : ys)
+                        | otherwise = [y] ++ merge (x : xs) ys
+
+sum_rec :: Integral a => [a] -> a
+sum_rec []       = 0
+sum_rec (x : xs) = x + sum_rec xs
+
+all2 :: (a -> Bool) -> [a] -> Bool
+all2 f []       = True
+all2 f (x : xs) = f x && all2 f xs
+
+all3 p = and . map p
+
+data Tree a = Leaf a | Node (Tree a) (Tree a)
+
+numLeaves :: Tree a -> Int
+numLeaves (Leaf _  ) = 1
+numLeaves (Node l r) = numLeaves l + numLeaves r
+
+balanced :: Tree a -> Bool
+balanced (Leaf _  ) = True
+balanced (Node l r) = numLeaves l == balanced r
