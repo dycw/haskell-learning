@@ -8,10 +8,10 @@ repos:
     hooks:
       - id: prettier
   - repo: https://github.com/dycw/pre-commit-hooks
-    rev: 0.0.80
+    rev: 0.2.3
     hooks:
       - id: check-settings
-      - id: shfmt
+      # - id: shfmt
   - repo: https://github.com/jumanjihouse/pre-commit-hooks
     rev: 2.1.5
     hooks:
